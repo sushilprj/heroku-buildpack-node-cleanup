@@ -1,13 +1,32 @@
-# heroku-buildpack-node-cleanup
+# Heroku Buildpack: Node Cleanup
 
-Deletes the node_modules folder to decrease slug size.
+The maximum allowed Heroku slug size (after compression) is 300MB. Image-heavy apps can somethings butt up against this limit, especially when using multiple buildpacks.
+
+If you're using Node.js to compile your front-end assets, but not to run your app, you may be able to save a large amount of space by deleting the `node_modules` directory before slug compilation.
 
 ## Usage
 
-    $ heroku buildpacks:set https://github.com/ztory/heroku-buildpack-node-cleanup.git
+First, set the Node.js buildpack to compile your assets:
 
-Or add it to the .buildpacks file if using [heroku-buildpack-multi](https://github.com/ddollar/heroku-buildpack-multi):
+```bash
+$ heroku buildpacks:set heroku/nodejs
+```
 
-    $ cat .buildpacks
-    ...
-    https://github.com/ztory/heroku-buildpack-node-cleanup.git
+Next, add the Node Cleanup buildpack to get rid of the `node_modules` directory:
+
+```bash
+$ heroku buildpacks:set --index 1 https://github.com/istrategylabs/heroku-buildpack-node-cleanup
+```
+
+Finally, add whichever buildpack runs your app:
+
+```bash
+$ heroku buildpacks:set --index 2 heroku/python
+```
+
+## Documentation
+
+For more general information about buildpacks on Heroku:
+
+- [Using Multiple Buildpacks for an App](https://devcenter.heroku.com/articles/using-multiple-buildpacks-for-an-app)
+- [Slug Compiler](https://devcenter.heroku.com/articles/slug-compiler)
