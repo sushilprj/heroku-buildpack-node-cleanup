@@ -3,6 +3,8 @@
 
 BUILD_DIR=$1
 
-echo "-----> Deleting the node_modules folder..."
+echo "-----> Deleting the node_modules directory"
 rm -r $BUILD_DIR/node_modules
-echo "       Done!"
+
+echo "-----> Deleting the nodejs.sh startup script"
+rm $BUILD_DIR/.profile.d/nodejs.sh
